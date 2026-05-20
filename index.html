@@ -1,253 +1,605 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<title>Borang Laporan Aktiviti Kerja BDR / BDP UTM</title>
 <style>
-*{
-box-sizing:border-box;
-margin:0;
-padding:0;
-}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui, -apple-system, sans-serif;background:#f3f4f6;color:#1f2937}
+.wrap{max-width:800px;margin:0 auto;padding:1rem 0}
 
-body{
-font-family:system-ui,sans-serif;
-background:#f3f4f6;
-}
+/* ── HEADER ── */
+.utm-header{background:#fff;border:0.5px solid #e5e7eb;border-radius:12px;overflow:hidden;margin-bottom:1.25rem;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05)}
+.utm-header-top{background:#800020;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;gap:12px;border-bottom:4px solid #C5A059}
+.utm-logo-area{display:flex;align-items:center;gap:16px;width:100%}
+.utm-logo-placeholder{background:#fff;border-radius:8px;padding:6px;width:220px;height:auto;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;box-shadow:0 2px 4px rgba(0,0,0,0.1)}
+.utm-logo-placeholder img{width:100%;height:100%;object-fit:contain;display:block}
+.utm-name-block{color:#ffffff}
+.utm-name-block h1{font-size:1.5rem;font-weight:700;letter-spacing:.5px;margin-bottom:0;color:#ffffff !important}
+.utm-header-badge{background:#C5A059;color:#ffffff;font-size:11px;font-weight:700;padding:6px 12px;border-radius:20px;white-space:nowrap;letter-spacing:.5px}
 
-.wrap{
-max-width:900px;
-margin:auto;
-padding:20px;
-}
+/* ── CARDS ── */
+.card{background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:1rem;box-shadow:0 2px 4px rgba(0,0,0,0.02)}
+.sec-title{font-size:1.1rem;font-weight:700;color:#800020;border-bottom:2px solid #800020;padding-bottom:8px;margin-bottom:1.25rem;display:flex;align-items:center;gap:8px}
+.sec-num{background:#800020;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
 
-.card{
-background:#fff;
-border-radius:14px;
-padding:24px;
-margin-bottom:18px;
-box-shadow:0 4px 12px rgba(0,0,0,0.06);
-}
+/* ── FORM ELEMENTS ── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:0.875rem;font-weight:600;color:#374151;margin-bottom:4px;display:block;text-transform:uppercase;letter-spacing:.4px}
+.field input,.field select,.field textarea{border:1px solid #d1d5db;border-radius:6px;padding:10px 14px;font-size:0.9rem;background:#fff;color:#1f2937;width:100%;transition:all 0.2s}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:#800020;box-shadow:0 0 0 3px rgba(128,0,32,0.15)}
 
-.header{
-background:#800020;
-color:#fff;
-padding:30px;
-border-radius:18px;
-margin-bottom:20px;
-}
+.ptj-select-wrap{position:relative}
+.ptj-search{width:100%;border:1px solid #d1d5db;border-radius:6px;padding:10px 14px;font-size:0.9rem;background:#fff;color:#1f2937}
+.ptj-dropdown{border:1px solid #800020;border-radius:6px;max-height:200px;overflow-y:auto;display:none;background:#fff;position:absolute;width:100%;z-index:50;box-shadow:0 4px 6px rgba(0,0,0,0.1);margin-top:4px}
+.ptj-dropdown.open{display:block}
+.ptj-option{padding:10px 14px;font-size:0.875rem;cursor:pointer;border-bottom:1px solid #e5e7eb;line-height:1.4}
+.ptj-option:hover{background:#f3f4f6;color:#800020}
+.ptj-group{padding:5px 10px;font-size:10px;font-weight:600;color:#C5A059;background:#800020;text-transform:uppercase;position:sticky;top:0;z-index:10}
+.selected-ptj{background:#f9fafb;border:1px solid #800020;border-radius:6px;padding:10px 14px;font-size:0.9rem;color:#800020;margin-top:4px;display:none;align-items:center;justify-content:space-between}
+.selected-ptj button{background:none;border:none;color:#A32D2D;cursor:pointer;font-size:14px}
 
-.header h1{
-font-size:28px;
-margin-bottom:8px;
-}
+/* ── MOD BEKERJA ── */
+.mod-wrap{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+.mod-opt{border:1px solid #d1d5db;border-radius:6px;padding:12px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .15s}
+.mod-opt:hover { border-color: #800020; }
+.mod-opt.active { border: 2px solid #800020; background: #fdf2f4; }
+.mod-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.mod-icon.bdr { background: #EAF3DE; }
+.mod-icon.bdp { background: #E6F1FB; }
+.mod-label { font-size: 13px; font-weight: 600; }
+.mod-sub { font-size: 11px; color: #4b5563; }
 
-.header p{
-opacity:0.9;
-}
+/* ── TASK TABLE ── */
+.task-table{width:100%;border-collapse:collapse;font-size:12px}
+.task-table th{background:#800020;color:#ffffff !important;font-size:11px;font-weight:600;padding:10px 12px;text-align:left}
+.task-table th:first-child{border-radius:6px 0 0 0}
+.task-table th:last-child{border-radius:0 6px 0 0;text-align:center}
+.task-table td{padding:8px 10px;border-bottom:1px solid #e5e7eb;vertical-align:middle}
+.task-table tr:nth-child(even) td{background:#fafafa}
+.task-table input,.task-table select{border:1px solid #d1d5db;border-radius:6px;padding:6px 10px;font-size:12px;width:100%}
+.del-row{background:none;border:none;color:#E24B4A;cursor:pointer;font-size:16px;padding:0 4px}
+.add-row{display:inline-flex;align-items:center;gap:8px;color:#800020;font-size:0.9rem;font-weight:600;cursor:pointer;margin-top:12px;padding:8px 16px;background:none;border:2px dashed #800020;border-radius:6px}
+.add-row:hover{background:#fdf2f4}
 
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:14px;
-}
+/* ── IMG UPLOAD ── */
+.image-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(180px, 1fr));gap:12px;margin-top:12px}
+.image-preview-card{border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;background:#f9fafb;position:relative}
+.image-preview-card img{width:100%;height:120px;object-fit:cover;display:block}
+.image-caption-input{padding:8px;border-top:1px solid #e5e7eb;font-size:0.75rem;width:100%;border-left:none;border-right:none;border-bottom:none;outline:none}
+.remove-img-btn{position:absolute;top:4px;right:4px;background:rgba(239,68,68,0.9);color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;cursor:pointer;border:none;z-index:10}
 
-.field{
-display:flex;
-flex-direction:column;
-gap:6px;
-margin-bottom:14px;
-}
+/* ── ACTIONS ── */
+.actions{display:flex;gap:10px;margin-top:1.25rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;border-radius:6px;font-size:0.95rem;font-weight:600;cursor:pointer;border:1px solid #d1d5db;background:#fff;color:#1f2937}
+.btn-maroon{background:#800020;color:#fff;border-color:#800020}
+.btn-maroon:hover{background:#600018}
+.btn-outline{border:1px solid #d1d5db;color:#4b5563}
+.btn-outline:hover{background:#f9fafb}
 
-.field label{
-font-size:13px;
-font-weight:700;
-text-transform:uppercase;
-color:#4b5563;
-}
-
-.field input,
-.field textarea,
-.field select{
-width:100%;
-padding:12px 14px;
-border:1px solid #d1d5db;
-border-radius:8px;
-font-size:14px;
-}
-
-.field textarea{
-min-height:120px;
-resize:vertical;
-}
-
-.btn{
-background:#800020;
-color:#fff;
-border:none;
-padding:14px 22px;
-border-radius:10px;
-font-weight:700;
-cursor:pointer;
-width:100%;
-font-size:15px;
-}
-
-.btn:hover{
-background:#600018;
-}
-
-.preview-img{
-width:100%;
-max-height:240px;
-object-fit:cover;
-border-radius:10px;
-margin-top:12px;
-display:none;
-}
-
-.sign-area{
-border:2px dashed #d1d5db;
-border-radius:10px;
-background:#fff;
-height:180px;
-position:relative;
-overflow:hidden;
-}
-
-.sign-area canvas{
-width:100%;
-height:100%;
-}
-
-.sign-actions{
-margin-top:10px;
-display:flex;
-justify-content:flex-end;
-}
-
-.clear-btn{
-background:#ef4444;
-color:#fff;
-border:none;
-padding:8px 14px;
-border-radius:8px;
-cursor:pointer;
-}
-
-@media(max-width:768px){
-
-.grid{
-grid-template-columns:1fr;
-}
-
-.header h1{
-font-size:22px;
-}
-
-.wrap{
-padding:10px;
-}
-
-.card{
-padding:18px;
-}
-
-}
+.toast{display:none;padding:12px 16px;border-radius:6px;font-size:13px;margin-top:1rem}
+.toast.ok{background:#EAF3DE;color:#27500A;border:1.5px solid #97C459;display:flex}
+.req{color:#E24B4A}
 </style>
+</head>
+<body>
 
 <div class="wrap">
 
-<div class="header">
-<div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
-<img src="http://people.utm.my/kamalm/wp-content/uploads/sites/1966/2026/05/New-UTM-ASCEND2030-COL1.png" style="width:220px;max-width:100%;background:#fff;padding:8px;border-radius:10px">
-<div>
-<h1 style="color:#ffffff">BDR / BDP UTM</h1>
-<p style="color:#ffffff">Borang Laporan Aktiviti Harian</p>
-</div>
-</div>
+<div class="utm-header">
+  <div class="utm-header-top">
+    <div class="utm-logo-area">
+      <div class="utm-logo-placeholder">
+        <img id="logoImg" src="http://people.utm.my/kamalm/wp-content/uploads/sites/1966/2026/05/New-UTM-ASCEND2030-COL1.png" alt="Logo UTM ASCEND2030">
+      </div>
+      <div class="utm-name-block">
+        <h1>Universiti Teknologi Malaysia</h1>
+      </div>
+    </div>
+    <div class="utm-header-badge">LAPORAN HARIAN</div>
+  </div>
 </div>
 
 <div class="card">
-
-<div class="grid">
-
-<div class="field">
-<label>Nama Penuh</label>
-<input type="text" id="nama">
+  <div class="sec-title"><span class="sec-num">0</span> Maklumat Organisasi</div>
+  <div class="grid2">
+    <div class="field">
+      <label>Pusat Tanggungjawab (PTJ) / Fakulti / Jabatan <span class="req">*</span></label>
+      <div class="ptj-select-wrap">
+        <input type="text" class="ptj-search" id="ptjSearch" placeholder="Cari menggunakan Kod atau Nama PTJ..." autocomplete="off" oninput="filterPTJ()" onfocus="openDropdown()" onblur="setTimeout(closeDropdown,200)">
+        <div class="ptj-dropdown" id="ptjDropdown"></div>
+      </div>
+      <div class="selected-ptj" id="selectedPTJDisplay">
+        <div><strong><span id="selectedPTJCode"></span></strong> - <span id="selectedPTJName"></span></div>
+        <button onclick="clearPTJ()">✕</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Unit / Seksyen / Bahagian <span class="req">*</span></label>
+      <input type="text" id="unitOrganisasi" placeholder="Contoh: Unit Forensic Engineering Centre (FEC)" oninput="saveToLocal()">
+    </div>
+  </div>
 </div>
 
-<div class="field">
-<label>No Pekerja</label>
-<input type="text" id="nopekerja">
+<div class="card">
+  <div class="sec-title"><span class="sec-num">1</span> Maklumat Kakitangan</div>
+  <div style="display:grid;gap:12px">
+    <div class="grid3">
+      <div class="field" style="grid-column:1/3">
+        <label>Nama Penuh Staf <span class="req">*</span></label>
+        <input type="text" id="nama" placeholder="Nama penuh" oninput="saveToLocal()">
+      </div>
+      <div class="field">
+        <label>No. Pekerja / Kad Staf <span class="req">*</span></label>
+        <input type="text" id="noPekerja" placeholder="Cth: P12345" oninput="saveToLocal()">
+      </div>
+    </div>
+    <div class="grid3">
+      <div class="field" style="grid-column:1/3">
+        <label>Jawatan / Gred <span class="req">*</span></label>
+        <input type="text" id="jawatan" placeholder="Cth: Jurutera Awam J41" oninput="saveToLocal()">
+      </div>
+      <div class="field">
+        <label>Tarikh Tugasan <span class="req">*</span></label>
+        <input type="date" id="tarikh" onchange="saveToLocal()">
+      </div>
+    </div>
+    <div class="field">
+      <label>Mod Bekerja <span class="req">*</span></label>
+      <div class="mod-wrap">
+        <div class="mod-opt" id="modBDR" onclick="selectMod('BDR')">
+          <div class="mod-icon bdr">🏠</div>
+          <div><div class="mod-label">BDR</div><div class="mod-sub">Rumah</div></div>
+        </div>
+        <div class="mod-opt" id="modBDP" onclick="selectMod('BDP')">
+          <div class="mod-icon bdp">🏢</div>
+          <div><div class="mod-label">BDP</div><div class="mod-sub">Pejabat</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
+<div class="card">
+  <div class="sec-title"><span class="sec-num">2</span> Senarai Tugas & Bukti Kerja</div>
+  <div style="overflow-x:auto">
+    <table class="task-table">
+      <thead>
+        <tr>
+          <th style="width:45px">Bil.</th>
+          <th style="width:150px">Masa / Tempoh</th>
+          <th>Perincian Tugasan / Aktiviti</th>
+          <th style="width:150px">Status</th>
+          <th style="width:40px"></th>
+        </tr>
+      </thead>
+      <tbody id="taskBody"></tbody>
+    </table>
+  </div>
+  <button class="add-row" onclick="addTaskRow()">+ Tambah baris</button>
 </div>
 
-<div class="grid">
-
-<div class="field">
-<label>Jawatan</label>
-<input type="text" id="jawatan">
+<div class="card">
+  <div class="sec-title"><span class="sec-num">3</span> Lampiran Bukti Gambar / Imej</div>
+  <div class="field">
+    <label>Muat Naik Gambar Tugas (Maksimum 4)</label>
+    <input type="file" id="bulkImgInput" accept="image/*" multiple onchange="handleBulkImg(event)" style="margin-bottom:10px">
+  </div>
+  <div class="image-grid" id="imgGrid"></div>
 </div>
 
-<div class="field">
-<label>Tarikh</label>
-<input type="date" id="tarikh">
+<div class="card">
+  <div class="sec-title"><span class="sec-num">4</span> Perakuan Dokumen</div>
+  <div style="padding: 16px; background: #fafafa; border: 1px solid #e5e7eb; border-radius: 8px; max-width: 400px;">
+    <div style="font-size: 11px; font-weight: 700; color: #800020; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Disediakan Oleh:</div>
+    <div style="font-size: 14px; font-weight: 700; color: #1f2937; margin-top: 8px;" id="displayPenyedia">—</div>
+    <div style="font-size: 11px; color: #4b5563; margin-top: 2px;" id="displayNoStaf">Akuan Staf</div>
+  </div>
 </div>
 
+<div class="actions">
+  <button class="btn btn-maroon" onclick="downloadPDF()">Muat Turun PDF</button>
+  <button class="btn btn-outline" onclick="resetForm()">Set Semula</button>
 </div>
-
-<div class="field">
-<label>Mod Bekerja</label>
-<select id="mod">
-<option value="BDR">BDR</option>
-<option value="BDP">BDP</option>
-</select>
-</div>
-
-<div class="field">
-<label>Laporan Tugasan</label>
-<textarea id="laporan" placeholder="Tulis laporan tugasan di sini..."></textarea>
-</div>
-
-<div class="field">
-<label>Upload Gambar</label>
-<input type="file" id="gambar" accept="image/*">
-<img id="preview" class="preview-img">
-</div>
-
-
-
-<button class="btn" onclick="downloadPDF()">
-Download PDF
-</button>
-
-</div>
-
+<div class="toast" id="toast"></div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
+const PTJ_DATA = [
+  {group:'J — JOHOR BAHRU', items:[
+    {code:'J0101',name:'PEJABAT NAIB CANSELOR'},
+    {code:'J0103',name:'PEJABAT STRATEGI & HAL EHWAL KORPORAT'},
+    {code:'J0104',name:'MAJLIS PROFESOR'},
+    {code:'J0106',name:'PUSAT KUALITI & PENGURUSAN RISIKO UTM'},
+    {code:'J0107',name:'PEJABAT PELESTARIAN KAMPUS'},
+    {code:'J0108',name:'PUSAT ISLAM'},
+    {code:'J0132',name:'UNIT AUDIT DALAM'},
+    {code:'J0134',name:'UTM INTERNATIONAL'},
+    {code:'J0135',name:'PEJABAT PENASIHAT UNDANG-UNDANG DAN INTEGRITI'},
+    {code:'J02',name:'DEPARTMENT OF THE REGISTRAR'},
+    {code:'J03',name:'DEPARTMENT OF THE BURSARY'},
+    {code:'J04',name:'DEPARTMENT OF THE UTM LIBRARY'},
+    {code:'J06',name:'DEPARTMENT OF THE DEPUTY VICE CHANCELLOR (STUDENT AFFAIRS)'},
+    {code:'J07',name:'UTMDIGITAL'},
+    {code:'J08',name:'DEPARTMENT OF THE DEPUTY VICE CHANCELLOR (ACADEMIC AND INTERNATIONAL)'},
+    {code:'J0900',name:'DEPARTMENT OF THE DEPUTY VICE CHANCELLOR (RESEARCH AND INNOVATION)'},
+    {code:'J0901',name:'PEJABAT PENTADBIRAN TNC (P&I)'},
+    {code:'J0902',name:'HEALTH AND WELLNESS'},
+    {code:'J0903',name:'FRONTIER MATERIALS'},
+    {code:'J0904',name:'RESOURCE SUSTAINABILITY'},
+    {code:'J0905',name:'SMART DIGITAL COMMUNITY'},
+    {code:'J0906',name:'INNOVATIVE ENGINEERING'},
+    {code:'J0907',name:'INSTITUTE FOR VEHICLE SYSTEMS AND ENGINEERING'},
+    {code:'J0908',name:'INSTITUTE OF FUTURE ENERGY'},
+    {code:'J0909',name:'INSTITUTE FOR SMART INFRASTRUCTURES AND INNOVATIVE CONSTRUCTION'},
+    {code:'J0910',name:'IBNU SINA INSTITUTE FOR SCIENTIFIC & INDUSTRIAL RESEARCH'},
+    {code:'J0911',name:'RESEARCH INSTITUTE FOR SUSTAINABLE ENVIRONMENT'},
+    {code:'J0912',name:'INSTITUTE OF HUMAN CENTRED ENGINEERING'},
+    {code:'J0913',name:'WIRELESS COMMUNICATION CENTRE'},
+    {code:'J0914',name:'ADVANCED MEMBRANE TECHNOLOGY RESEARCH CENTRE'},
+    {code:'J0916',name:'PUSAT PENGURUSAN MAKMAL UNIVERSITI'},
+    {code:'J0918',name:'PENERBIT UTM PRESS'},
+    {code:'J0920',name:'BAHAGIAN PENGURUSAN RESEARCH ALLIANCE'},
+    {code:'J0922',name:'INSTITUT SULTAN ISKANDAR'},
+    {code:'J0923',name:'CENTRE FOR COMMUNITY AND INDUSTRY NETWORK'},
+    {code:'J10',name:'SCHOOL OF GRADUATE STUDIES'},
+    {code:'J11',name:'SCHOOL OF PROFESSIONAL AND CONTINUING EDUCATION'},
+    {code:'J12',name:'PENERBIT UTM PRESS'},
+    {code:'J13',name:'RESEARCH MANAGEMENT CENTRE'},
+    {code:'J14',name:'INNOVATION AND COMMERCIALISATION CENTRE'},
+    {code:'J17',name:'DEPARTMENT OF THE DEPUTY VICE CHANCELLOR (DEVELOPMENT)'},
+    {code:'J22',name:'FACULTY OF CIVIL ENGINEERING'},
+    {code:'J23',name:'FACULTY OF ELECTRICAL ENGINEERING'},
+    {code:'J24',name:'FACULTY OF MECHANICAL ENGINEERING'},
+    {code:'J28',name:'FACULTY OF COMPUTING'},
+    {code:'J29',name:'FACULTY OF MANAGEMENT'},
+    {code:'J46',name:'FACULTY OF CHEMICAL AND ENERGY ENGINEERING'},
+    {code:'J52',name:'FACULTY OF BUILT ENVIRONMENT & SURVEYING'},
+    {code:'J53',name:'FACULTY OF SOCIAL SCIENCES AND HUMANITIES'},
+    {code:'J54',name:'FACULTY OF SCIENCE'}
+  ]},
+  {group:'K — KUALA LUMPUR', items:[
+    {code:'K0100',name:'CHANCELLERY'},
+    {code:'K0101',name:'PEJABAT PENGARAH KAMPUS, UTMKL'},
+    {code:'K0103',name:'PEJABAT HAL EHWAL KORPORAT'},
+    {code:'K0107',name:'PEJABAT PELESTARIAN KAMPUS'},
+    {code:'K0110',name:'PUSAT ISLAM, UTMKL'},
+    {code:'K0132',name:'PUSAT KUALITI & PENGURUSAN RISIKO UTM, UTMKL'},
+    {code:'K0134',name:'UTM INTERNATIONAL, UTMKL'},
+    {code:'K02',name:'DEPARTMENT OF THE REGISTRAR'},
+    {code:'K03',name:'DEPARTMENT OF THE BURSARY'},
+    {code:'K04',name:'DEPARTMENT OF THE UTM LIBRARY'},
+    {code:'K06',name:'DEPARTMENT OF THE DEPUTY VICE CHANCELLOR (STUDENT AFFAIRS)'},
+    {code:'K07',name:'UTMDIGITAL'},
+    {code:'K08',name:'DEPARTMENT OF DEPUTY VICE CHANCELLOR (ACADEMIC AND INTERNATIONAL)'},
+    {code:'K0900',name:'DEPARTMENT OF DEPUTY VICE CHANCELLOR (RESEARCH AND INNOVATION)'},
+    {code:'K0901',name:'PEJABAT PENTADBIRAN PENYELIDIKAN & INOVASI'},
+    {code:'K0902',name:'HEALTH AND WELLNESS'},
+    {code:'K0903',name:'FRONTIER MATERIALS'},
+    {code:'K0904',name:'RESOURCE SUSTAINABILITY'},
+    {code:'K0905',name:'SMART DIGITAL COMMUNITY'},
+    {code:'K0906',name:'INNOVATIVE ENGINEERING'},
+    {code:'K0907',name:'INSTITUTE FOR VEHICLE SYSTEMS AND ENGINEERING'},
+    {code:'K0908',name:'INSTITUTE OF FUTURE ENERGY'},
+    {code:'K0909',name:'INSTITUTE FOR SMART INFRASTRUCTURES AND INNOVATIVE CONSTRUCTION'},
+    {code:'K0910',name:'IBNU SINA INSTITUTE FOR SCIENTIFIC & INDUSTRIAL RESEARCH'},
+    {code:'K0911',name:'RESEARCH INSTITUTE FOR SUSTAINABLE ENVIRONMENT'},
+    {code:'K0912',name:'INSTITUTE OF HUMAN CENTERED'},
+    {code:'K0913',name:'WIRELESS COMMUNICATION CENTRE'},
+    {code:'K0916',name:'PENGURUSAN MAKMAL UNIVERSITI'},
+    {code:'K0922',name:'INSTITUT SULTAN ISKANDAR'},
+    {code:'K0923',name:'CENTRE FOR COMMUNITY AND INDUSTRY NETWORK'},
+    {code:'K17',name:'DEPARTMENT OF DEPUTY VICE CHANCELLOR (DEVELOPMENT)'},
+    {code:'K43',name:'MALAYSIA-Japan INTERNATIONAL INSTITUTE OF TECHNOLOGY'},
+    {code:'K53',name:'FACULTY OF SOCIAL SCIENCES AND HUMANITIES'},
+    {code:'K55',name:'AZMAN HASHIM INTERNATIONAL BUSINESS SCHOOL'},
+    {code:'K56',name:'RAZAK FACULTY OF TECHNOLOGY & INFORMATICS'}
+  ]},
+  {group:'P — PAGOH', items:[
+    {code:'P01',name:'JABATAN CANSELERI'},
+    {code:'P09',name:'JABATAN TIMBALAN NAIB CANSELOR (PENYELIDIKAN & INOVASI)'}
+  ]}
+];
 
-// IMAGE PREVIEW
-const gambarInput = document.getElementById('gambar');
-const preview = document.getElementById('preview');
+let selMod='', selPTJ=null, taskRows=[{masa:'',tugasan:'',status:''}], imgData=[];
 
-let imageData = null;
+window.onload = function() {
+  document.getElementById('nama').addEventListener('input', updatePenyediaLabel);
+  document.getElementById('noPekerja').addEventListener('input', updatePenyediaLabel);
+  loadFromLocal();
+};
 
-gambarInput.addEventListener('change', function(e){
-
-const file = e.target.files[0];
-
-if(!file) return;
-
-const reader = new FileReader();
-
-reader.onload = function(event){
-imageData = event.target.result;
-preview.src = imageData;
-preview.style.display = 'block';
+function updatePenyediaLabel() {
+  const n = document.getElementById('nama').value.toUpperCase();
+  const id = document.getElementById('noPekerja').value;
+  document.getElementById('displayPenyedia').innerText = n || '—';
+  document.getElementById('displayNoStaf').innerText = id ? `No. Staf: ${id}` : 'Akuan Staf';
 }
 
-reader.readAsDataURL(file);
+/* ── PTJ SEARCH ── */
+function buildDropdown(filter=''){
+  const dd=document.getElementById('ptjDropdown'); dd.innerHTML=''; const q=filter.toLowerCase();
+  PTJ_DATA.forEach(g=>{
+    const items=g.items.filter(i=>i.code.toLowerCase().includes(q)||i.name.toLowerCase().includes(q));
+    if(!items.length) return;
+    const gh=document.createElement('div'); gh.className='ptj-group'; gh.textContent=g.group; dd.appendChild(gh);
+    items.forEach(i=>{
+      const el=document.createElement('div'); el.className='ptj-option';
+      el.innerHTML=`<strong>${i.code}</strong> - <span>${i.name}</span>`;
+      el.onmousedown=()=>choosePTJ(i); dd.appendChild(el);
+    });
+  });
+}
+function filterPTJ(){buildDropdown(document.getElementById('ptjSearch').value);document.getElementById('ptjDropdown').classList.add('open');}
+function openDropdown(){buildDropdown(document.getElementById('ptjSearch').value);document.getElementById('ptjDropdown').classList.add('open');}
+function closeDropdown(){document.getElementById('ptjDropdown').classList.remove('open');}
 
-});
+function choosePTJ(item){
+  selPTJ=item; document.getElementById('ptjSearch').value=''; document.getElementById('ptjDropdown').classList.remove('open');
+  document.getElementById('selectedPTJDisplay').style.display='flex';
+  document.getElementById('selectedPTJName').textContent=item.name; document.getElementById('selectedPTJCode').textContent=item.code;
+  saveToLocal();
+}
+function clearPTJ(){selPTJ=null;document.getElementById('selectedPTJDisplay').style.display='none';saveToLocal();}
+function selectMod(m){ selMod=m; document.getElementById('modBDR').classList.toggle('active',m==='BDR'); document.getElementById('modBDP').classList.toggle('active',m==='BDP'); saveToLocal();}
 
-```
+/* ── TASKS ── */
+function addTaskRow(){ taskRows.push({masa:'',tugasan:'',status:''}); renderTasks(); saveToLocal(); }
+function removeTask(i){ if(taskRows.length>1){ taskRows.splice(i,1); renderTasks(); saveToLocal(); } }
+function updateTaskData(i, field, value) { taskRows[i][field] = value; saveToLocal(); }
+
+function renderTasks(){
+  const tb=document.getElementById('taskBody'); tb.innerHTML='';
+  taskRows.forEach((row,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td style="text-align:center; font-weight:bold; color:#4b5563">${i+1}</td>
+      <td><input type="text" value="${row.masa||''}" oninput="updateTaskData(${i}, 'masa', this.value)" placeholder="Cth: 8:00 AM"></td>
+      <td><input type="text" value="${row.tugasan||''}" oninput="updateTaskData(${i}, 'tugasan', this.value)" placeholder="Perincian tugas..."></td>
+      <td><select onchange="updateTaskData(${i}, 'status', this.value)">
+        <option value="">Pilih</option>
+        <option value="Selesai" ${row.status==='Selesai'?'selected':''}>✓ Selesai</option>
+        <option value="Dalam Proses" ${row.status==='Dalam Proses'?'selected':''}>⏳ Dalam Proses</option>
+        <option value="Tindakan Lanjut" ${row.status==='Tindakan Lanjut'?'selected':''}>→ Tindakan Lanjut</option>
+      </select></td>
+      <td style="text-align:center"><button class="del-row" onclick="removeTask(${i})">✕</button></td>`;
+    tb.appendChild(tr);
+  });
+}
+
+/* ── IMAGE BULK UPLOAD ── */
+function handleBulkImg(e){
+  const files=Array.from(e.target.files);
+  files.forEach(f=>{
+    if(imgData.length>=4) return;
+    const r=new FileReader();
+    r.onload=ev=>{
+      imgData.push({data:ev.target.result, cap:''});
+      renderImages();
+      saveToLocal();
+    };
+    r.readAsDataURL(f);
+  });
+  e.target.value=''; 
+}
+function removeImg(i){ imgData.splice(i,1); renderImages(); saveToLocal(); }
+function updateImgCaption(i, val){ imgData[i].cap = val; saveToLocal(); }
+
+function renderImages(){
+  const g=document.getElementById('imgGrid'); g.innerHTML='';
+  imgData.forEach((img,i)=>{
+    const div=document.createElement('div'); div.className='image-preview-card';
+    div.innerHTML=`<button class="remove-img-btn" onclick="removeImg(${i})">✕</button>
+    <img src="${img.data}">
+    <input type="text" class="image-caption-input" placeholder="Keterangan gambar ${i+1}..." value="${img.cap||''}" oninput="updateImgCaption(${i}, this.value)">`;
+    g.appendChild(div);
+  });
+}
+
+/* ── LOCALSTORAGE ENGINE ── */
+function saveToLocal() {
+  const formData = {
+    nama: document.getElementById('nama').value,
+    noPekerja: document.getElementById('noPekerja').value,
+    jawatan: document.getElementById('jawatan').value,
+    tarikh: document.getElementById('tarikh').value,
+    unitOrganisasi: document.getElementById('unitOrganisasi').value,
+    selMod: selMod,
+    selPTJ: selPTJ,
+    taskRows: taskRows,
+    imgData: imgData
+  };
+  localStorage.setItem('utmBdrBdpData', JSON.stringify(formData));
+}
+
+function loadFromLocal() {
+  const saved = localStorage.getItem('utmBdrBdpData');
+  if (saved) {
+    const data = JSON.parse(saved);
+    document.getElementById('nama').value = data.nama || '';
+    document.getElementById('noPekerja').value = data.noPekerja || '';
+    document.getElementById('jawatan').value = data.jawatan || '';
+    document.getElementById('tarikh').value = data.tarikh || '';
+    document.getElementById('unitOrganisasi').value = data.unitOrganisasi || '';
+    if(data.selMod) selectMod(data.selMod);
+    if(data.selPTJ) choosePTJ(data.selPTJ);
+    if(data.taskRows) taskRows = data.taskRows;
+    if(data.imgData) { imgData = data.imgData; renderImages(); }
+  }
+  updatePenyediaLabel();
+  renderTasks();
+}
+
+/* ── PDF ENGINE ── */
+function downloadPDF(){
+  const {jsPDF} = window.jspdf;
+  const doc = new jsPDF({orientation:'portrait', unit:'mm', format:'a4'});
+  const W = 210, M = 14, CW = W - M*2;
+  let y = 45;
+  
+  const pageCheck = (n=10) => { if(y+n > 275){ doc.addPage(); y = 20; } };
+
+  // ── HEADER UTM (logo embedded as shapes) ──
+  // Bar maroon
+  doc.setFillColor(128,0,32); doc.rect(0,0,210,36,'F');
+  // Bar gold
+  doc.setFillColor(197,160,89); doc.rect(0,36,210,5,'F');
+
+  // Kotak putih logo (simulate logo placeholder)
+  doc.setFillColor(255,255,255); doc.roundedRect(M, 6, 44, 24, 2, 2, 'F');
+  
+  // "UTM" text dalam kotak
+  doc.setTextColor(128,0,32); doc.setFontSize(11); doc.setFont('helvetica','bold');
+  doc.text('UTM', M+8, 16);
+  // Garisan gold bawah UTM
+  doc.setDrawColor(197,160,89); doc.setLineWidth(1.5);
+  doc.line(M+4, 20, M+40, 20);
+  // Teks kecil ASCEND 2030
+  doc.setTextColor(128,0,32); doc.setFontSize(5); doc.setFont('helvetica','bold');
+  doc.text('ASCEND 2030', M+5, 25);
+
+  // Nama universiti
+  doc.setTextColor(255,255,255); doc.setFontSize(13); doc.setFont('helvetica','bold');
+  doc.text('UNIVERSITI TEKNOLOGI MALAYSIA', M+50, 16);
+  // Tajuk borang
+  doc.setFontSize(8.5); doc.setFont('helvetica','normal');
+  doc.text('Laporan Aktiviti Kerja Harian BDR / BDP', M+50, 25);
+
+  // Badge LAPORAN HARIAN (kanan)
+  doc.setFillColor(197,160,89); doc.roundedRect(152, 10, 44, 14, 3, 3, 'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(7); doc.setFont('helvetica','bold');
+  doc.text('LAPORAN HARIAN', 154, 19);
+
+  // PTJ & Unit Section
+  doc.setFillColor(243,244,246); doc.rect(M, y, CW, 14, 'F');
+  doc.setTextColor(128,0,32); doc.setFontSize(8.5); doc.setFont('helvetica','bold');
+  doc.text('PTJ:', M+4, y+5.5);
+  doc.text('UNIT:', M+110, y+5.5);
+  doc.setTextColor(0,0,0); doc.setFont('helvetica','normal'); doc.setFontSize(9);
+  const ptjTxt = selPTJ ? `[${selPTJ.code}] ${selPTJ.name}` : '— Tidak Dinyatakan —';
+  doc.text(ptjTxt, M+14, y+5.5);
+  doc.text(document.getElementById('unitOrganisasi').value || '—', M+122, y+5.5);
+  
+  doc.setFontSize(7.5); doc.setTextColor(120,120,120);
+  doc.text(`Tarikh Cetak Fail: ${new Date().toLocaleDateString('ms-MY')}`, M+4, y+10.5);
+  y += 20;
+
+  // Maklumat Staf
+  pageCheck(35);
+  doc.setFont('helvetica','bold'); doc.setTextColor(128,0,32); doc.setFontSize(9.5); doc.text('1. MAKLUMAT KAKITANGAN', M, y);
+  doc.setDrawColor(128,0,32); doc.line(M, y+2, W-M, y+2);
+  y += 8;
+
+  doc.setFontSize(8.5); doc.setTextColor(100,100,100);
+  doc.text('Nama Staf:', M, y); doc.text('No. Pekerja:', M+110, y);
+  doc.setTextColor(0,0,0); doc.setFont('helvetica','normal'); doc.setFontSize(10);
+  doc.text(document.getElementById('nama').value || '—', M, y+5);
+  doc.text(document.getElementById('noPekerja').value || '—', M+110, y+5);
+  y += 12;
+
+  doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(100,100,100);
+  doc.text('Jawatan / Gred:', M, y); doc.text('Tarikh Tugasan:', M+110, y);
+  doc.setTextColor(0,0,0); doc.setFont('helvetica','normal'); doc.setFontSize(10);
+  doc.text(document.getElementById('jawatan').value || '—', M, y+5);
+  const rawDate = document.getElementById('tarikh').value;
+  const tf = rawDate ? new Date(rawDate).toLocaleDateString('ms-MY', {day:'2-digit',month:'long',year:'numeric'}) : '—';
+  doc.text(tf, M+110, y+5);
+  y += 12;
+
+  doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(100,100,100);
+  doc.text('Mod Bekerja:', M, y);
+  doc.setTextColor(128,0,32); doc.setFontSize(10);
+  doc.text(selMod ? (selMod === 'BDR' ? 'BDR (Bekerja Dari Rumah)' : 'BDP (Bekerja Dari Pejabat)') : '—', M+25, y);
+  y += 12;
+
+  // Senarai Tugas Table
+  pageCheck(25);
+  doc.setFont('helvetica','bold'); doc.setTextColor(128,0,32); doc.setFontSize(9.5);
+  doc.text('2. SENARAI TUGAS & BUKTI KERJA', M, y);
+  doc.line(M, y+2, W-M, y+2);
+  y += 7;
+
+  const cw = [12, 35, CW-77, 30];
+  doc.setFillColor(128,0,32); doc.rect(M, y, CW, 7, 'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(8.5); doc.setFont('helvetica','bold');
+  
+  let cx = M;
+  doc.text('Bil', cx+2, y+5); cx+=cw[0];
+  doc.text('Masa', cx+2, y+5); cx+=cw[1];
+  doc.text('Perincian Aktiviti', cx+2, y+5); cx+=cw[2];
+  doc.text('Status', cx+2, y+5);
+  y += 7;
+
+  doc.setTextColor(0,0,0); doc.setFont('helvetica','normal'); doc.setFontSize(9);
+  taskRows.forEach((row, idx) => {
+    const lines = doc.splitTextToSize(row.tugasan || '—', cw[2]-4);
+    const rh = Math.max(8, lines.length * 5 + 3);
+    pageCheck(rh);
+
+    doc.setFillColor(idx % 2 === 0 ? 255 : 248);
+    doc.rect(M, y, CW, rh, 'F');
+    doc.setDrawColor(200,200,200); doc.rect(M, y, CW, rh, 'S');
+    
+    let rx = M;
+    doc.text(String(idx+1), rx+4, y+5.5); rx+=cw[0];
+    doc.text(row.masa || '—', rx+2, y+5.5); rx+=cw[1];
+    doc.text(lines, rx+2, y+5.5); rx+=cw[2];
+    doc.text(row.status || '—', rx+2, y+5.5);
+    y += rh;
+  });
+  y += 12;
+
+  // Imej Bukti
+  if(imgData.length > 0){
+    pageCheck(40);
+    doc.setFont('helvetica','bold'); doc.setTextColor(128,0,32); doc.setFontSize(9.5);
+    doc.text('3. LAMPIRAN BUKTI GAMBAR', M, y);
+    doc.line(M, y+2, W-M, y+2);
+    y += 8;
+
+    let col = 0; let imgW = (CW - 6) / 2; let startX = M;
+    imgData.forEach((img) => {
+      if(img && img.data){
+        pageCheck(55);
+        try {
+          doc.setDrawColor(220,220,220); doc.rect(startX + (col*imgW) + (col*6), y, imgW, 40, 'S');
+          doc.addImage(img.data, 'JPEG', startX + (col*imgW) + (col*6) + 1, y + 1, imgW - 2, 38);
+          doc.setFontSize(8); doc.setFont('helvetica','normal'); doc.setTextColor(50,50,50);
+          const cap = img.cap || "Bukti Gambar";
+          doc.text(doc.splitTextToSize(cap, imgW), startX + (col*imgW) + (col*6), y+44);
+        } catch(e) {}
+        col++; if(col > 1) { col = 0; y += 52; }
+      }
+    });
+    if(col === 1) y += 52;
+    y += 5;
+  }
+
+  // Perakuan Seksyen (Akuan Staf)
+  pageCheck(35);
+  doc.setFont('helvetica','bold'); doc.setTextColor(128,0,32); doc.setFontSize(9.5);
+  doc.text('4. PERAKUAN DOKUMEN', M, y);
+  doc.line(M, y+2, W-M, y+2);
+  y += 8;
+
+  let boxW = 90;
+  doc.setDrawColor(200,200,200); doc.setFillColor(249,250,251);
+  
+  doc.rect(M, y, boxW, 25, 'FD');
+  doc.setTextColor(128,0,32); doc.setFontSize(8); doc.setFont('helvetica','bold');
+  doc.text('DISEDIAKAN OLEH (PENGESAHAN DIGITAL):', M+3, y+5);
+  doc.setTextColor(0,0,0); doc.setFontSize(9); doc.text(document.getElementById('nama').value.toUpperCase() || '—', M+3, y+13);
+  doc.setFontSize(7.5); doc.setFont('helvetica','normal'); doc.text(document.getElementById('noPekerja').value ? `No. Staf: ${document.getElementById('noPekerja').value}` : 'Akuan Staf', M+3, y+19);
+
+  doc.save(`Laporan_Kerja_UTM_${document.getElementById('noPekerja').value || 'Staf'}_${document.getElementById('tarikh').value}.pdf`);
+  showToast("PDF berjaya dijana!");
+}
+
+function showToast(m){ const t=document.getElementById('toast'); t.textContent=m; t.className='toast ok'; t.style.display='block'; setTimeout(()=>{t.style.display='none';},4000); }
+function resetForm(){ if(confirm("Set semula borang dan padam memori simpanan?")){ localStorage.removeItem('utmBdrBdpData'); location.reload(); } }
+</script>
+</body>
+</html>
