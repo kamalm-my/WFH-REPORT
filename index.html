@@ -1,253 +1,137 @@
-<style>
-*{
-box-sizing:border-box;
-margin:0;
-padding:0;
-}
-
-body{
-font-family:system-ui,sans-serif;
-background:#f3f4f6;
-}
-
-.wrap{
-max-width:900px;
-margin:auto;
-padding:20px;
-}
-
-.card{
-background:#fff;
-border-radius:14px;
-padding:24px;
-margin-bottom:18px;
-box-shadow:0 4px 12px rgba(0,0,0,0.06);
-}
-
-.header{
-background:#800020;
-color:#fff;
-padding:30px;
-border-radius:18px;
-margin-bottom:20px;
-}
-
-.header h1{
-font-size:28px;
-margin-bottom:8px;
-}
-
-.header p{
-opacity:0.9;
-}
-
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:14px;
-}
-
-.field{
-display:flex;
-flex-direction:column;
-gap:6px;
-margin-bottom:14px;
-}
-
-.field label{
-font-size:13px;
-font-weight:700;
-text-transform:uppercase;
-color:#4b5563;
-}
-
-.field input,
-.field textarea,
-.field select{
-width:100%;
-padding:12px 14px;
-border:1px solid #d1d5db;
-border-radius:8px;
-font-size:14px;
-}
-
-.field textarea{
-min-height:120px;
-resize:vertical;
-}
-
-.btn{
-background:#800020;
-color:#fff;
-border:none;
-padding:14px 22px;
-border-radius:10px;
-font-weight:700;
-cursor:pointer;
-width:100%;
-font-size:15px;
-}
-
-.btn:hover{
-background:#600018;
-}
-
-.preview-img{
-width:100%;
-max-height:240px;
-object-fit:cover;
-border-radius:10px;
-margin-top:12px;
-display:none;
-}
-
-.sign-area{
-border:2px dashed #d1d5db;
-border-radius:10px;
-background:#fff;
-height:180px;
-position:relative;
-overflow:hidden;
-}
-
-.sign-area canvas{
-width:100%;
-height:100%;
-}
-
-.sign-actions{
-margin-top:10px;
-display:flex;
-justify-content:flex-end;
-}
-
-.clear-btn{
-background:#ef4444;
-color:#fff;
-border:none;
-padding:8px 14px;
-border-radius:8px;
-cursor:pointer;
-}
-
-@media(max-width:768px){
-
-.grid{
-grid-template-columns:1fr;
-}
-
-.header h1{
-font-size:22px;
-}
-
-.wrap{
-padding:10px;
-}
-
-.card{
-padding:18px;
-}
-
-}
-</style>
-
-<div class="wrap">
-
-<div class="header">
-<div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
-<img src="http://people.utm.my/kamalm/wp-content/uploads/sites/1966/2026/05/New-UTM-ASCEND2030-COL1.png" style="width:220px;max-width:100%;background:#fff;padding:8px;border-radius:10px">
-<div>
-<h1 style="color:#ffffff">BDR / BDP UTM</h1>
-<p style="color:#ffffff">Borang Laporan Aktiviti Harian</p>
-</div>
-</div>
-</div>
-
-<div class="card">
-
-<div class="grid">
-
-<div class="field">
-<label>Nama Penuh</label>
-<input type="text" id="nama">
-</div>
-
-<div class="field">
-<label>No Pekerja</label>
-<input type="text" id="nopekerja">
-</div>
-
-</div>
-
-<div class="grid">
-
-<div class="field">
-<label>Jawatan</label>
-<input type="text" id="jawatan">
-</div>
-
-<div class="field">
-<label>Tarikh</label>
-<input type="date" id="tarikh">
-</div>
-
-</div>
-
-<div class="field">
-<label>Mod Bekerja</label>
-<select id="mod">
-<option value="BDR">BDR</option>
-<option value="BDP">BDP</option>
-</select>
-</div>
-
-<div class="field">
-<label>Laporan Tugasan</label>
-<textarea id="laporan" placeholder="Tulis laporan tugasan di sini..."></textarea>
-</div>
-
-<div class="field">
-<label>Upload Gambar</label>
-<input type="file" id="gambar" accept="image/*">
-<img id="preview" class="preview-img">
-</div>
-
-
-
-<button class="btn" onclick="downloadPDF()">
-Download PDF
-</button>
-
-</div>
-
-</div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
 <script>
+  // === SETTING: URL Web App Google Apps Script ===
+  const APPS_SCRIPT_URL = 'PASTE_WEB_APP_URL_DI_SINI';
 
-// IMAGE PREVIEW
-const gambarInput = document.getElementById('gambar');
-const preview = document.getElementById('preview');
+  // IMAGE PREVIEW
+  const gambarInput = document.getElementById('gambar');
+  const preview = document.getElementById('preview');
+  let imageData = null;
 
-let imageData = null;
+  gambarInput.addEventListener('change', function(e){
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = function(event){
+      imageData = event.target.result;
+      preview.src = imageData;
+      preview.style.display = 'block';
+    }
+    reader.readAsDataURL(file);
+  });
 
-gambarInput.addEventListener('change', function(e){
+  // Fungsi HANTAR DATA ke Google Sheet (Apps Script)
+  async function hantarKeSheet(payload) {
+    const response = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors', // paling mudah, tak pening CORS
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+    // mode: 'no-cors' tak boleh baca response, tapi cukup untuk log ke Sheet
+    return true;
+  }
 
-const file = e.target.files[0];
+  // Kumpul data borang (supaya boleh guna semula di Submit & PDF)
+  function getFormData() {
+    const nama = document.getElementById('nama').value;
+    const nopekerja = document.getElementById('nopekerja').value;
+    const jawatan = document.getElementById('jawatan').value;
+    const tarikh = document.getElementById('tarikh').value;
+    const mod = document.getElementById('mod').value;
+    const laporan = document.getElementById('laporan').value;
 
-if(!file) return;
+    return {
+      nama,
+      nopekerja,
+      jawatan,
+      tarikh,
+      mod,
+      laporan,
+      gambarURL: imageData || ''
+    };
+  }
 
-const reader = new FileReader();
+  // 1) BUTANG SUBMIT – hanya hantar ke Google Sheet
+  async function submitForm() {
+    const payload = getFormData();
 
-reader.onload = function(event){
-imageData = event.target.result;
-preview.src = imageData;
-preview.style.display = 'block';
-}
+    try {
+      await hantarKeSheet(payload);
+      alert('Data berjaya dihantar ke Google Sheet.');
+    } catch (err) {
+      console.error('Ralat hantar ke Google Sheet:', err);
+      alert('Ralat semasa hantar data. Sila cuba lagi.');
+    }
+  }
 
-reader.readAsDataURL(file);
+  // 2) BUTANG DOWNLOAD PDF – hanya generate & download PDF
+  function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
 
-});
+    const data = getFormData();
+    const nama = data.nama;
+    const nopekerja = data.nopekerja;
+    const jawatan = data.jawatan;
+    const tarikh = data.tarikh;
+    const mod = data.mod;
+    const laporan = data.laporan;
 
-```
+    // HEADER
+    doc.setFillColor(128,0,32);
+    doc.rect(0,0,210,30,'F');
+    doc.setTextColor(255,255,255);
+    doc.setFontSize(18);
+    doc.text('Laporan BDR / BDP UTM', 20, 18);
+
+    // CONTENT
+    doc.setTextColor(0,0,0);
+    doc.setFontSize(12);
+    let y = 45;
+
+    function addField(label, value){
+      doc.setFont(undefined, 'bold');
+      doc.text(label, 20, y);
+      doc.setFont(undefined, 'normal');
+      doc.text(value || '-', 70, y);
+      y += 10;
+    }
+
+    addField('Nama', nama);
+    addField('No Pekerja', nopekerja);
+    addField('Jawatan', jawatan);
+    addField('Tarikh', tarikh);
+    addField('Mod', mod);
+
+    // Laporan
+    y += 8;
+    doc.setFont(undefined, 'bold');
+    doc.text('Laporan Tugasan', 20, y);
+    y += 8;
+    doc.setFont(undefined, 'normal');
+    const splitText = doc.splitTextToSize(laporan || '-', 170);
+    doc.text(splitText, 20, y);
+    y += splitText.length * 7;
+
+    // IMAGE
+    if(imageData){
+      y += 10;
+      doc.setFont(undefined, 'bold');
+      doc.text('Lampiran Gambar', 20, y);
+      y += 8;
+      try{
+        doc.addImage(imageData, 'JPEG', 20, y, 80, 60);
+        y += 70;
+      }catch(err){
+        console.log(err);
+      }
+    }
+
+    // SAVE
+    const filename = 'Laporan_' + (nama || 'Staff') + '.pdf';
+    doc.save(filename);
+  }
+</script>
